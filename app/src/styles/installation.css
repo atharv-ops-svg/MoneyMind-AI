@@ -1,0 +1,768 @@
+
+/* =========================================
+   MONEY MIND AI — INSTALLATION PAGE
+========================================= */
+
+.installation-page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-bottom: 35px;
+}
+
+/* =========================================
+   HERO SECTION
+========================================= */
+
+.installation-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 35px;
+  min-height: 390px;
+  padding: 48px;
+  overflow: hidden;
+  border: 1px solid #e4eaf3;
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(59, 130, 246, 0.12),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
+}
+
+.installation-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+}
+
+.installation-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 30px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.installation-hero h1 {
+  margin: 22px 0 16px;
+  color: #14213d;
+  font-size: clamp(30px, 4vw, 43px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1.8px;
+}
+
+.installation-hero h1 span {
+  color: #3978ed;
+}
+
+.installation-hero-content > p {
+  max-width: 510px;
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   DOWNLOAD ACTIONS
+========================================= */
+
+.installation-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.installation-download-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 48px;
+  padding: 0 21px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.installation-download-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.installation-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.installation-platform-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 23px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.installation-platform-note svg {
+  color: #16a34a;
+}
+
+/* =========================================
+   APPLICATION PREVIEW
+========================================= */
+
+.installation-hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 15px;
+}
+
+.installation-window {
+  width: 100%;
+  max-width: 390px;
+  overflow: hidden;
+  border: 1px solid #dbe4f0;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 25px 60px rgba(30, 64, 120, 0.16);
+  transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+}
+
+.installation-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  border-bottom: 1px solid #edf1f7;
+}
+
+.installation-window-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #17243c;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.installation-mini-logo {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.installation-window-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.installation-window-controls span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #cbd5e1;
+}
+
+.installation-window-body {
+  padding: 21px;
+}
+
+.installation-preview-label {
+  color: #94a3b8;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.installation-preview-title {
+  margin-top: 7px;
+  color: #17243c;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.installation-preview-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 19px;
+  padding: 16px;
+  border-radius: 11px;
+  background: #eff6ff;
+}
+
+.installation-preview-balance span,
+.installation-preview-cards span {
+  color: #64748b;
+  font-size: 10px;
+}
+
+.installation-preview-balance strong {
+  color: #1e40af;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.installation-preview-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.installation-preview-cards > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px;
+  border: 1px solid #edf1f7;
+  border-radius: 10px;
+}
+
+.installation-preview-cards b {
+  color: #17243c;
+  font-size: 14px;
+}
+
+.installation-preview-chart {
+  margin-top: 15px;
+  padding: 14px;
+  border: 1px solid #edf1f7;
+  border-radius: 10px;
+}
+
+.installation-chart-heading {
+  color: #475569;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.installation-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 7px;
+  height: 65px;
+  margin-top: 15px;
+}
+
+.installation-chart-bars span {
+  flex: 1;
+  min-width: 0;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
+}
+
+.installation-floating-icon {
+  position: absolute;
+  right: 0;
+  bottom: 15px;
+  display: grid;
+  width: 57px;
+  height: 57px;
+  place-items: center;
+  border: 5px solid #ffffff;
+  border-radius: 17px;
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+}
+
+/* =========================================
+   RELEASE INFORMATION
+========================================= */
+
+.installation-release-card {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 21px 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.installation-release-icon {
+  display: grid;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 13px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.installation-release-info {
+  flex: 1;
+}
+
+.installation-release-info h3 {
+  margin: 0;
+  color: #17243c;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.installation-release-info p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.installation-coming-soon {
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border-radius: 30px;
+  background: #fff7ed;
+  color: #c2410c;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* =========================================
+   GENERAL SECTIONS
+========================================= */
+
+.installation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+
+.installation-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.installation-section-label {
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.installation-section-heading h2 {
+  margin: 8px 0;
+  color: #17243c;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.installation-section-heading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   INSTALLATION STEPS
+========================================= */
+
+.installation-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.installation-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  background: #ffffff;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.installation-step:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 8px 22px rgba(30, 64, 120, 0.06);
+  transform: translateY(-2px);
+}
+
+.installation-step-number {
+  display: grid;
+  flex-shrink: 0;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.installation-step h3 {
+  margin: 2px 0 7px;
+  color: #17243c;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.installation-step p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   SYSTEM REQUIREMENTS
+========================================= */
+
+.installation-requirements {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.installation-requirement {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.installation-requirement-icon {
+  display: grid;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 11px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.installation-requirement > div:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.installation-requirement span {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.installation-requirement strong {
+  color: #17243c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.installation-requirement-check {
+  flex-shrink: 0;
+  color: #16a34a;
+}
+
+.installation-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px 16px;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.installation-disclaimer svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.installation-disclaimer p {
+  margin: 0;
+  color: #475569;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   BOTTOM BANNER
+========================================= */
+
+.installation-bottom-banner {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 23px 25px;
+  border-radius: 17px;
+  background: linear-gradient(110deg, #1d4ed8, #2563eb);
+  color: #ffffff;
+}
+
+.installation-bottom-icon {
+  display: grid;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.installation-bottom-banner > div:nth-child(2) {
+  flex: 1;
+}
+
+.installation-bottom-banner h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.installation-bottom-banner p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+}
+
+.installation-bottom-banner .installation-coming-soon {
+  background: rgba(255, 255, 255, 0.17);
+  color: #ffffff;
+}
+
+/* =========================================
+   DARK THEME
+========================================= */
+
+body.dark .installation-hero {
+  border-color: #27364d;
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(59, 130, 246, 0.15),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #17243a, #111c2e);
+}
+
+body.dark .installation-hero h1,
+body.dark .installation-section-heading h2,
+body.dark .installation-release-info h3,
+body.dark .installation-step h3,
+body.dark .installation-requirement strong {
+  color: #f1f5f9;
+}
+
+body.dark .installation-hero-content > p,
+body.dark .installation-platform-note,
+body.dark .installation-section-heading p,
+body.dark .installation-release-info p,
+body.dark .installation-step p,
+body.dark .installation-requirement span {
+  color: #94a3b8;
+}
+
+body.dark .installation-release-card,
+body.dark .installation-step,
+body.dark .installation-requirement {
+  border-color: #29384d;
+  background: #17243a;
+}
+
+body.dark .installation-step:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .installation-disclaimer {
+  border-color: #29466d;
+  background: #172d49;
+}
+
+body.dark .installation-disclaimer p {
+  color: #cbd5e1;
+}
+
+body.dark .installation-release-icon,
+body.dark .installation-step-number,
+body.dark .installation-requirement-icon {
+  background: #203b61;
+  color: #60a5fa;
+}
+
+body.dark .installation-floating-icon {
+  border-color: #17243a;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 1100px) {
+  .installation-hero {
+    grid-template-columns: 1fr 0.8fr;
+    padding: 35px;
+  }
+
+  .installation-hero h1 {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 850px) {
+  .installation-hero {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .installation-hero-content {
+    max-width: 100%;
+  }
+
+  .installation-hero-visual {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .installation-window {
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .installation-page {
+    gap: 22px;
+  }
+
+  .installation-hero {
+    min-height: auto;
+    padding: 25px 20px;
+    border-radius: 18px;
+  }
+
+  .installation-hero h1 {
+    font-size: 30px;
+    letter-spacing: -1px;
+  }
+
+  .installation-hero-content > p {
+    font-size: 13px;
+  }
+
+  .installation-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .installation-download-button {
+    width: 100%;
+  }
+
+  .installation-hero-visual {
+    padding: 10px 5px;
+  }
+
+  .installation-floating-icon {
+    right: -3px;
+    bottom: 0;
+    width: 48px;
+    height: 48px;
+  }
+
+  .installation-release-card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 17px;
+  }
+
+  .installation-release-info {
+    min-width: 0;
+  }
+
+  .installation-release-card .installation-coming-soon {
+    margin-left: 64px;
+  }
+
+  .installation-steps,
+  .installation-requirements {
+    grid-template-columns: 1fr;
+  }
+
+  .installation-step {
+    padding: 18px;
+  }
+
+  .installation-section-heading h2 {
+    font-size: 21px;
+  }
+
+  .installation-bottom-banner {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 19px;
+  }
+
+  .installation-bottom-banner > div:nth-child(2) {
+    min-width: 0;
+  }
+
+  .installation-bottom-banner .installation-coming-soon {
+    margin-left: 65px;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .installation-step {
+    transition: none;
+  }
+}

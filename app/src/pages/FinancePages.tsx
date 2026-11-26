@@ -20,6 +20,8 @@ import {
 } from 'recharts'
 
 import { useFinance } from '../context/useFinance'
+import { useDialogue } from '../context/DialogueContext'
+
 import {
   FINANCE_CATEGORIES,
   type FinanceCategory,
@@ -110,6 +112,8 @@ export function TransactionsPage() {
     removeTransaction,
   } = useFinance()
 
+  const { showAlert, showConfirm } = useDialogue()
+
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('all')
   const [showForm, setShowForm] = useState(false)
@@ -153,7 +157,11 @@ export function TransactionsPage() {
     }
 
     if (!input.title || !Number.isFinite(input.amount) || input.amount <= 0) {
-      window.alert('Enter a title and an amount greater than zero.')
+      void showAlert({
+        title: 'Invalid transaction',
+        message: 'Enter a title and an amount greater than zero.',
+        type: 'warning',
+      })
       return
     }
 
@@ -168,12 +176,23 @@ export function TransactionsPage() {
       setEditingId(null)
       setForm(emptyTransaction)
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : 'Unable to save transaction.')
+      void showAlert({
+        title: 'Transaction error',
+        message: error instanceof Error ? error.message : 'Unable to save transaction.',
+        type: 'error',
+      })
     }
   }
 
-  function deleteTransaction(id: number) {
-    if (window.confirm('Are you sure you want to delete this transaction?')) {
+  async function deleteTransaction(id: number) {
+    const confirmed = await showConfirm({
+      title: 'Delete transaction?',
+      message: 'Are you sure you want to delete this transaction?',
+      type: 'warning',
+      confirmText: 'Delete',
+    })
+
+    if (confirmed) {
       removeTransaction(id)
     }
   }
@@ -381,6 +400,8 @@ export function TransactionsPage() {
 
 export function BudgetsPage() {
   const { data, changeBudget } = useFinance()
+  const { showAlert } = useDialogue()
+
   const [drafts, setDrafts] = useState<Record<string, string>>({})
 
   const summaries = getAllBudgetSummaries(data.transactions, data.budgets)
@@ -389,7 +410,11 @@ export function BudgetsPage() {
     const amount = Number(drafts[category] ?? data.budgets[category])
 
     if (!Number.isFinite(amount) || amount < 0) {
-      window.alert('Enter a valid budget amount.')
+      void showAlert({
+        title: 'Invalid budget',
+        message: 'Enter a valid budget amount.',
+        type: 'warning',
+      })
       return
     }
 
@@ -401,7 +426,11 @@ export function BudgetsPage() {
         return next
       })
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : 'Unable to update budget.')
+      void showAlert({
+        title: 'Budget update failed',
+        message: error instanceof Error ? error.message : 'Unable to update budget.',
+        type: 'error',
+      })
     }
   }
 
@@ -532,6 +561,8 @@ export function GoalsPage() {
     removeGoal,
   } = useFinance()
 
+  const { showAlert, showConfirm, showPrompt } = useDialogue()
+
   const [name, setName] = useState('')
   const [target, setTarget] = useState('')
   const [saved, setSaved] = useState('0')
@@ -554,7 +585,11 @@ export function GoalsPage() {
       savedAmount < 0 ||
       savedAmount > targetAmount
     ) {
-      window.alert('Enter a goal name and valid target and saved amounts.')
+      void showAlert({
+        title: 'Invalid savings goal',
+        message: 'Enter a goal name and valid target and saved amounts.',
+        type: 'warning',
+      })
       return
     }
 
@@ -569,27 +604,61 @@ export function GoalsPage() {
       setSaved('0')
       setShowForm(false)
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : 'Unable to create goal.')
+      void showAlert({
+        title: 'Goal creation failed',
+        message: error instanceof Error ? error.message : 'Unable to create goal.',
+        type: 'error',
+      })
     }
   }
 
-  function updateGoalDetails(id: number, currentName: string, currentTarget: number) {
-    const nextName = window.prompt('Goal name:', currentName)
+  async function updateGoalDetails(
+    id: number,
+    currentName: string,
+    currentTarget: number,
+  ) {
+    const nextName = await showPrompt({
+      title: 'Edit savings goal',
+      message: 'Enter the updated goal name.',
+      inputLabel: 'Goal name',
+      defaultValue: currentName,
+      type: 'info',
+      confirmText: 'Next',
+    })
+
     if (nextName === null) return
 
-    const nextTarget = window.prompt('Target amount:', String(currentTarget))
+    const nextTarget = await showPrompt({
+      title: 'Update target amount',
+      message: 'Enter the new target amount.',
+      inputLabel: 'Target amount',
+      defaultValue: String(currentTarget),
+      placeholder: 'Enter amount',
+      type: 'info',
+      confirmText: 'Save',
+    })
+
     if (nextTarget === null) return
 
     const amount = Number(nextTarget)
+
     if (!nextName.trim() || !Number.isFinite(amount) || amount <= 0) {
-      window.alert('Enter a valid goal name and target.')
+      void showAlert({
+        title: 'Invalid goal details',
+        message: 'Enter a valid goal name and target.',
+        type: 'warning',
+      })
       return
     }
 
     try {
       editGoal(id, { name: nextName.trim(), target: amount })
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : 'Unable to edit goal.')
+      void showAlert({
+        title: 'Goal update failed',
+        message: error instanceof Error ? error.message : 'Unable to edit goal.',
+        type: 'error',
+      })
     }
   }
 
@@ -597,7 +666,11 @@ export function GoalsPage() {
     const amount = Number(savingDrafts[id] ?? currentSaved)
 
     if (!Number.isFinite(amount) || amount < 0 || amount > targetAmount) {
-      window.alert('Saved amount must be between zero and the target amount.')
+      void showAlert({
+        title: 'Invalid savings amount',
+        message: 'Saved amount must be between zero and the target amount.',
+        type: 'warning',
+      })
       return
     }
 
@@ -609,7 +682,11 @@ export function GoalsPage() {
         return next
       })
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : 'Unable to update savings.')
+      void showAlert({
+        title: 'Savings update failed',
+        message: error instanceof Error ? error.message : 'Unable to update savings.',
+        type: 'error',
+      })
     }
   }
 
@@ -726,8 +803,15 @@ export function GoalsPage() {
               </button>
               <button
                 className="text-btn"
-                onClick={() => {
-                  if (window.confirm(`Delete the goal "${goal.name}"?`)) {
+                onClick={async () => {
+                  const confirmed = await showConfirm({
+                    title: 'Delete savings goal?',
+                    message: `Are you sure you want to delete "${goal.name}"?`,
+                    type: 'warning',
+                    confirmText: 'Delete',
+                  })
+
+                  if (confirmed) {
                     removeGoal(goal.id)
                   }
                 }}
@@ -983,6 +1067,8 @@ export function AssistantPage() {
 
 export function SettingsPage() {
   const { data, updateSettings, resetData } = useFinance()
+  const { showAlert, showConfirm } = useDialogue()
+
   const [profile, setProfile] = useState(data.profile)
   const [currency, setCurrency] = useState(data.currency)
 
@@ -994,9 +1080,18 @@ export function SettingsPage() {
         profile: profile.trim(),
         currency,
       })
-      window.alert('Settings saved successfully.')
+
+      void showAlert({
+        title: 'Settings saved',
+        message: 'Your settings were saved successfully.',
+        type: 'success',
+      })
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : 'Unable to save settings.')
+      void showAlert({
+        title: 'Settings error',
+        message: error instanceof Error ? error.message : 'Unable to save settings.',
+        type: 'error',
+      })
     }
   }
 
@@ -1006,15 +1101,24 @@ export function SettingsPage() {
     })
   }
 
-  function resetApplicationData() {
-    if (
-      window.confirm(
-        'This will restore the default demonstration data and replace your current saved data. Continue?',
-      )
-    ) {
+  async function resetApplicationData() {
+    const confirmed = await showConfirm({
+      title: 'Reset application data?',
+      message: 'This will restore the default demonstration data and replace your current saved data. Continue?',
+      type: 'warning',
+      confirmText: 'Reset data',
+    })
+
+    if (confirmed) {
       resetData()
       setProfile('MoneyMind User')
       setCurrency('INR')
+
+      void showAlert({
+        title: 'Data reset',
+        message: 'Your application data has been restored.',
+        type: 'success',
+      })
     }
   }
 

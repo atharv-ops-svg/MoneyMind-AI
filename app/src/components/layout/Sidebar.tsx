@@ -7,9 +7,12 @@ import {
   ChartNoAxesCombined,
   Sparkles,
   Settings,
+  MonitorDown,
   CircleHelp,
   MoreHorizontal,
 } from 'lucide-react'
+
+import { isDesktopApp } from '../../utils/platform'
 
 export type PageId =
   | 'dashboard'
@@ -19,6 +22,7 @@ export type PageId =
   | 'reports'
   | 'assistant'
   | 'settings'
+  | 'download'
 
 interface SidebarProps {
   activePage: PageId
@@ -36,10 +40,27 @@ const navigationItems = [
 ] as const
 
 function Sidebar({ activePage, onNavigate }: SidebarProps) {
+  const visibleNavigationItems = isDesktopApp
+    ? navigationItems
+    : [
+        ...navigationItems,
+        {
+          id: 'download' as const,
+          label: 'Download App',
+          icon: MonitorDown,
+        },
+      ]
+
   return (
     <aside className="sidebar">
       <div className="brand">
-        <div className="brand-mark">M</div>
+        <div className="brand-mark">
+  <img
+    src="/icons.png"
+    alt="MoneyMind AI"
+    className="brand-logo"
+  />
+</div>
 
         <div>
           <b>MoneyMind AI</b>
@@ -50,7 +71,7 @@ function Sidebar({ activePage, onNavigate }: SidebarProps) {
       <div className="side-label">WORKSPACE</div>
 
       <nav aria-label="Main navigation">
-        {navigationItems.map(item => {
+        {visibleNavigationItems.map(item => {
           const Icon = item.icon
 
           return (
@@ -68,6 +89,7 @@ function Sidebar({ activePage, onNavigate }: SidebarProps) {
               <span>
                 <Icon size={18} />
               </span>
+
               {item.label}
             </button>
           )
@@ -79,8 +101,12 @@ function Sidebar({ activePage, onNavigate }: SidebarProps) {
           <div className="help-icon">
             <CircleHelp size={20} />
           </div>
+
           <b>Need some help?</b>
-          <p>Explore your finances and make smarter decisions.</p>
+
+          <p>
+            Explore your finances and make smarter decisions.
+          </p>
         </div>
 
         <div className="profile">

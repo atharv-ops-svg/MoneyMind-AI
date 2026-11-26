@@ -9,13 +9,14 @@ interface TopbarProps {
 }
 
 const pageTitles: Record<PageId, string> = {
-  dashboard: 'Financial Overview',
+  dashboard: 'Overview',
   transactions: 'Transactions',
-  budgets: 'Budget Management',
+  budgets: 'Budgets',
   goals: 'Savings Goals',
-  reports: 'Financial Reports',
-  assistant: 'AI Financial Assistant',
+  reports: 'Reports',
+  assistant: 'AI Assistant',
   settings: 'Settings',
+  download: 'Download App',
 }
 
 function Topbar({ activePage }: TopbarProps) {
