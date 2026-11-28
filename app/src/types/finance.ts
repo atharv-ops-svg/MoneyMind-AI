@@ -12,7 +12,8 @@ export const FINANCE_CATEGORIES = [
   'Other',
 ] as const
 
-export type FinanceCategory = (typeof FINANCE_CATEGORIES)[number]
+export type FinanceCategory =
+  (typeof FINANCE_CATEGORIES)[number]
 
 export interface Transaction {
   id: number
@@ -32,7 +33,13 @@ export interface SavingsGoal {
 
 export interface FinanceData {
   profile: string
+
+  // Currency in which financial amounts are actually stored.
+  baseCurrency: string
+
+  // Currency selected for displaying financial amounts.
   currency: string
+
   theme: Theme
   transactions: Transaction[]
   budgets: Record<FinanceCategory, number>

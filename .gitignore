@@ -1,22 +1,43 @@
-﻿**/node_modules/
+﻿
+# Node.js dependencies
+**/node_modules/
+
+# Build outputs
 **/dist/
 **/build/
 **/coverage/
 
+# Rust build artifacts
+**/target/
+
+# Environment variables and secrets
 .env
 .env.*
 !.env.example
 
-**/__pycache__/
+# Python virtual environments
 **/.venv/
 **/venv/
 
+# Python cache
+**/__pycache__/
+*.py[cod]
+
+# Logs
 *.log
+
+# Local databases
 *.db
 *.sqlite
 *.sqlite3
 
+# Temporary files
 ~$*
 .DS_Store
 Thumbs.db
+
+# Electron release output
 app/release/
+
+# Windows installer (publish separately as a GitHub Release asset)
+app/public/downloads/*.exe

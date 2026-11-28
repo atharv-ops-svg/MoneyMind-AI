@@ -8,12 +8,14 @@ import {
   HardDrive,
   MemoryStick,
   CheckCircle2,
-  Clock,
   Package,
   ArrowDownToLine,
   Info,
 } from 'lucide-react'
 import '../styles/installation.css'
+
+const INSTALLER_URL =
+  '/downloads/MoneyMind-AI-Setup-0.1.0.exe'
 
 function InstallationPage() {
   const requirements = [
@@ -44,7 +46,7 @@ function InstallationPage() {
       number: '01',
       title: 'Download the installer',
       description:
-        'Download the official MoneyMind AI Windows installer when the release becomes available.',
+        'Download the official MoneyMind AI Windows installer using the download button below.',
     },
     {
       number: '02',
@@ -89,18 +91,18 @@ function InstallationPage() {
           </p>
 
           <div className="installation-actions">
-            <button
-              type="button"
+            <a
+              href={INSTALLER_URL}
+              download="MoneyMind-AI-Setup-0.1.0.exe"
               className="installation-download-button"
-              disabled
             >
               <Download size={19} />
               Download for Windows
-            </button>
+            </a>
 
             <span className="installation-status">
-              <Clock size={15} />
-              Coming Soon
+              <CheckCircle2 size={15} />
+              Available Now
             </span>
           </div>
 
@@ -181,16 +183,21 @@ function InstallationPage() {
         </div>
 
         <div className="installation-release-info">
-          <h3>Windows desktop release</h3>
+          <h3>MoneyMind AI for Windows</h3>
           <p>
-            The Windows installer is currently being prepared.
-            Download availability will be announced here.
+            Download the Windows desktop installer and
+            get started with MoneyMind AI.
           </p>
         </div>
 
-        <span className="installation-coming-soon">
-          Coming Soon
-        </span>
+        <a
+          href={INSTALLER_URL}
+          download="MoneyMind-AI-Setup-0.1.0.exe"
+          className="installation-download-button"
+        >
+          <Download size={17} />
+          Download
+        </a>
       </section>
 
       <section className="installation-section">
@@ -282,13 +289,18 @@ function InstallationPage() {
         <div>
           <h2>MoneyMind AI for Windows</h2>
           <p>
-            Your personal finance workspace is coming to desktop.
+            Download the desktop application and get started.
           </p>
         </div>
 
-        <span className="installation-coming-soon">
-          Coming Soon
-        </span>
+        <a
+          href={INSTALLER_URL}
+          download="MoneyMind-AI-Setup-0.1.0.exe"
+          className="installation-download-button"
+        >
+          <Download size={17} />
+          Download Now
+        </a>
       </section>
     </div>
   )

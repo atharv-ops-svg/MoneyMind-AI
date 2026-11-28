@@ -1,5 +1,5 @@
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Bot,
   Pencil,
@@ -20,13 +20,16 @@ import {
 } from 'recharts'
 
 import { useFinance } from '../context/useFinance'
-import { useDialogue } from '../context/DialogueContext'
+import { useDialogue } from '../context/useDialogue'
+import WindowsHelloSettings from '../components/WindowsHelloSettings'
 
 import {
   FINANCE_CATEGORIES,
   type FinanceCategory,
   type Transaction,
 } from '../types/finance'
+
+import { CURRENCIES } from '../data/currencies'
 
 import type { TransactionInput } from '../services/transactionService'
 import {
@@ -35,22 +38,16 @@ import {
   sortTransactionsByDate,
 } from '../services/transactionService'
 
-import {
-  getAllBudgetSummaries,
-} from '../services/budgetService'
-
-import {
-  getAllGoalProgress,
-} from '../services/goalService'
+import { getAllBudgetSummaries } from '../services/budgetService'
+import { getAllGoalProgress } from '../services/goalService'
 
 import {
   generateMonthlyTrends,
   generateCategoryReport,
 } from '../services/reportService'
 
-import {
-  generateAssistantResponse,
-} from '../services/assistantService'
+import { generateAssistantResponse } from '../services/assistantService'
+import { saveRemoteSettings } from '../services/settingsService'
 
 function money(amount: number, currency: string) {
   try {
@@ -1066,39 +1063,159 @@ export function AssistantPage() {
 /* -------------------------------------------------------------------------- */
 
 export function SettingsPage() {
-  const { data, updateSettings, resetData } = useFinance()
+  const {
+    data,
+    updateSettings,
+    resetData,
+    removeTransaction,
+  } = useFinance()
+
   const { showAlert, showConfirm } = useDialogue()
 
   const [profile, setProfile] = useState(data.profile)
   const [currency, setCurrency] = useState(data.currency)
+  const [isSaving, setIsSaving] = useState(false)
+  const [isSavingTheme, setIsSavingTheme] = useState(false)
+  const [isClearingTransactions, setIsClearingTransactions] = useState(false)
 
-  function saveSettings(event: React.FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    setProfile(data.profile)
+    setCurrency(data.currency)
+  }, [data.profile, data.currency])
+
+  async function saveSettings(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    try {
-      updateSettings({
-        profile: profile.trim(),
-        currency,
+    const newProfile = profile.trim()
+
+    if (!newProfile) {
+      void showAlert({
+        title: 'Invalid username',
+        message: 'Please enter a username.',
+        type: 'warning',
       })
+      return
+    }
+
+    if (!currency || !/^[A-Z]{3}$/.test(currency)) {
+      void showAlert({
+        title: 'Invalid currency',
+        message: 'Please select a valid three-letter currency code.',
+        type: 'warning',
+      })
+      return
+    }
+
+    setIsSaving(true)
+
+    try {
+      await saveRemoteSettings({
+        profile: newProfile,
+        currency,
+        theme: data.theme,
+      })
+
+      updateSettings({
+        profile: newProfile,
+        currency,
+        theme: data.theme,
+      })
+
+      setProfile(newProfile)
 
       void showAlert({
         title: 'Settings saved',
-        message: 'Your settings were saved successfully.',
+        message: 'Your profile, currency and theme preferences have been saved to your account.',
         type: 'success',
       })
     } catch (error) {
       void showAlert({
-        title: 'Settings error',
-        message: error instanceof Error ? error.message : 'Unable to save settings.',
+        title: 'Settings synchronization failed',
+        message: error instanceof Error
+          ? error.message
+          : 'Unable to save your settings. Please try again.',
         type: 'error',
       })
+    } finally {
+      setIsSaving(false)
     }
   }
 
-  function toggleTheme() {
-    updateSettings({
-      theme: data.theme === 'light' ? 'dark' : 'light',
+  async function toggleTheme() {
+    if (isSavingTheme) return
+
+    const nextTheme = data.theme === 'light' ? 'dark' : 'light'
+
+    setIsSavingTheme(true)
+
+    try {
+      await saveRemoteSettings({ theme: nextTheme })
+      updateSettings({ theme: nextTheme })
+
+      void showAlert({
+        title: 'Appearance updated',
+        message: `Your ${nextTheme} theme has been saved to your account.`,
+        type: 'success',
+      })
+    } catch (error) {
+      void showAlert({
+        title: 'Theme synchronization failed',
+        message: error instanceof Error
+          ? error.message
+          : 'Unable to save your theme. Please try again.',
+        type: 'error',
+      })
+    } finally {
+      setIsSavingTheme(false)
+    }
+  }
+
+  async function clearAllTransactions() {
+    if (isClearingTransactions) return
+
+    const transactionIds = data.transactions.map(transaction => transaction.id)
+
+    if (transactionIds.length === 0) {
+      void showAlert({
+        title: 'No transactions to clear',
+        message: 'There are currently no transactions in your account.',
+        type: 'info',
+      })
+      return
+    }
+
+    const confirmed = await showConfirm({
+      title: 'Clear all transactions?',
+      message: `This will permanently delete all ${transactionIds.length} transactions. Your budgets, savings goals, account details and preferences will remain unchanged. This action cannot be undone.`,
+      type: 'warning',
+      confirmText: 'Clear All Transactions',
     })
+
+    if (!confirmed) return
+
+    setIsClearingTransactions(true)
+
+    try {
+      for (const id of transactionIds) {
+        removeTransaction(id)
+      }
+
+      void showAlert({
+        title: 'Transactions cleared',
+        message: `Successfully cleared ${transactionIds.length} transactions. Your budgets, savings goals, account details and preferences were preserved.`,
+        type: 'success',
+      })
+    } catch (error) {
+      void showAlert({
+        title: 'Unable to clear transactions',
+        message: error instanceof Error
+          ? error.message
+          : 'An error occurred while clearing transactions.',
+        type: 'error',
+      })
+    } finally {
+      setIsClearingTransactions(false)
+    }
   }
 
   async function resetApplicationData() {
@@ -1111,8 +1228,6 @@ export function SettingsPage() {
 
     if (confirmed) {
       resetData()
-      setProfile('MoneyMind User')
-      setCurrency('INR')
 
       void showAlert({
         title: 'Data reset',
@@ -1142,47 +1257,111 @@ export function SettingsPage() {
             <strong>Profile name</strong>
             <p className="muted">Name displayed in your application.</p>
           </div>
+
           <input
             value={profile}
             onChange={event => setProfile(event.target.value)}
             required
+            maxLength={100}
           />
         </div>
 
         <div className="setting-row">
           <div>
             <strong>Currency</strong>
-            <p className="muted">Currency used to display your financial amounts.</p>
+            <p className="muted">
+              Currency used to display your financial amounts.
+            </p>
           </div>
-          <select value={currency} onChange={event => setCurrency(event.target.value)}>
-            <option value="INR">INR — Indian Rupee</option>
-            <option value="USD">USD — US Dollar</option>
-            <option value="EUR">EUR — Euro</option>
-            <option value="GBP">GBP — British Pound</option>
-            <option value="JPY">JPY — Japanese Yen</option>
+
+          <select
+            value={currency}
+            onChange={event => setCurrency(event.target.value)}
+            required
+          >
+            {!CURRENCIES.some(item => item.code === currency) && (
+              <option value={currency}>{currency}</option>
+            )}
+
+            {CURRENCIES.map(item => (
+              <option key={item.code} value={item.code}>
+                {item.code} — {item.name} ({item.symbol})
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="modal-actions">
-          <button type="submit" className="primary-btn">Save Preferences</button>
+          <button
+            type="submit"
+            className="primary-btn"
+            disabled={isSaving || isSavingTheme}
+          >
+            {isSaving ? 'Saving...' : 'Save Preferences'}
+          </button>
         </div>
       </form>
+
+      <WindowsHelloSettings />
 
       <section className="panel settings-panel">
         <div className="panel-head">
           <div>
             <h3>Appearance</h3>
-            <p>Choose how MoneyMind AI looks.</p>
+            <p>Customize the application theme.</p>
           </div>
         </div>
 
         <div className="setting-row">
           <div>
             <strong>Dark mode</strong>
-            <p className="muted">Switch between light and dark appearance.</p>
+            <p className="muted">
+              Switch between light and dark themes.
+            </p>
           </div>
-          <button type="button" className="soft-btn" onClick={toggleTheme}>
-            {data.theme === 'dark' ? 'Switch to Light' : 'Switch to Dark'}
+
+          <button
+            type="button"
+            className="secondary-btn"
+            onClick={() => void toggleTheme()}
+            disabled={isSavingTheme || isSaving}
+          >
+            {isSavingTheme
+              ? 'Saving...'
+              : data.theme === 'light'
+                ? 'Enable Dark Mode'
+                : 'Enable Light Mode'}
+          </button>
+        </div>
+      </section>
+
+      <section className="panel settings-panel">
+        <div className="panel-head">
+          <div>
+            <h3>Transaction Management</h3>
+            <p>
+              Permanently remove all recorded income and expenses without resetting your other financial settings.
+            </p>
+          </div>
+        </div>
+
+        <div className="setting-row">
+          <div>
+            <strong>Clear all transactions</strong>
+            <p className="muted">
+              {data.transactions.length} transaction{data.transactions.length === 1 ? '' : 's'} currently recorded.
+              Budgets and savings goals will be preserved.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="danger-btn"
+            onClick={() => void clearAllTransactions()}
+            disabled={isClearingTransactions || data.transactions.length === 0}
+          >
+            <Trash2 size={16} />
+            {isClearingTransactions ? 'Clearing...' : 'Clear All Transactions'}
           </button>
         </div>
       </section>
@@ -1191,21 +1370,17 @@ export function SettingsPage() {
         <div className="panel-head">
           <div>
             <h3>Application Data</h3>
-            <p>Manage the financial information stored on this device.</p>
+            <p>Restore the original demonstration data.</p>
           </div>
         </div>
 
-        <div className="setting-row">
-          <div>
-            <strong>Reset demonstration data</strong>
-            <p className="muted">
-              Restore the original sample transactions, budgets and goals.
-            </p>
-          </div>
-          <button type="button" className="soft-btn" onClick={resetApplicationData}>
-            Reset Data
-          </button>
-        </div>
+        <button
+          type="button"
+          className="danger-btn"
+          onClick={() => void resetApplicationData()}
+        >
+          Reset Application Data
+        </button>
       </section>
     </div>
   )

@@ -1,3 +1,4 @@
+
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -19,6 +20,12 @@ def hash_password(password: str) -> str:
     """Hash a plaintext password using Argon2id."""
 
     return password_hasher.hash(password)
+
+
+def get_password_hash(password: str) -> str:
+    """Compatibility wrapper for password hashing."""
+
+    return hash_password(password)
 
 
 def verify_password(

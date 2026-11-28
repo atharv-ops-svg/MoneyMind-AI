@@ -9,13 +9,24 @@ import {
   Mail,
   ShieldCheck,
   UserRound,
+  Globe2,
+  Coins,
+  Search,
 } from 'lucide-react'
+
+import { COUNTRIES, getCurrenciesForCountry } from '../data/countries'
+import {
+  CURRENCIES,
+  getCurrencyByCode,
+} from '../data/currencies'
 
 interface RegisterPageProps {
   onRegister: (
     name: string,
     email: string,
     password: string,
+    countryCode: string,
+    currency: string,
   ) => Promise<void> | void
   onSignIn: () => void
   onBack: () => void
@@ -28,6 +39,10 @@ export default function RegisterPage({
 }: RegisterPageProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [countryCode, setCountryCode] = useState('')
+  const [currency, setCurrency] = useState('')
+  const [countrySearch, setCountrySearch] = useState('')
+
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -38,17 +53,48 @@ export default function RegisterPage({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const filteredCountries = COUNTRIES.filter((country) =>
+    country.name.toLowerCase().includes(countrySearch.trim().toLowerCase()) ||
+    country.code.toLowerCase() === countrySearch.trim().toLowerCase(),
+  )
+
+  const countryCurrencyCodes = getCurrenciesForCountry(countryCode)
+
+  const availableCurrencies = countryCurrencyCodes.length > 0
+    ? countryCurrencyCodes
+        .map((code) => getCurrencyByCode(code))
+        .filter((item) => item !== undefined)
+    : CURRENCIES.filter((item) => item.minorUnits >= 0)
+
+  function handleCountryChange(code: string) {
+    setCountryCode(code)
+    setCurrency('')
+    setError('')
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('')
 
-    if (!name.trim() || !email.trim() || !password || !confirmPassword) {
-      setError('Please complete all fields.')
+    if (
+      !name.trim() ||
+      !email.trim() ||
+      !countryCode ||
+      !currency ||
+      !password ||
+      !confirmPassword
+    ) {
+      setError('Please complete all fields and select a currency.')
       return
     }
 
     if (password.length < 8) {
       setError('Your password must contain at least 8 characters.')
+      return
+    }
+
+    if (password.length > 128) {
+      setError('Your password must not exceed 128 characters.')
       return
     }
 
@@ -69,6 +115,8 @@ export default function RegisterPage({
         name.trim(),
         email.trim(),
         password,
+        countryCode,
+        currency,
       )
     } catch (err) {
       setError(
@@ -123,9 +171,7 @@ export default function RegisterPage({
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="auth-field">
-              <label htmlFor="register-name">
-                Full name
-              </label>
+              <label htmlFor="register-name">Full name</label>
 
               <div className="auth-input-wrapper">
                 <UserRound size={18} />
@@ -137,15 +183,14 @@ export default function RegisterPage({
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   autoComplete="name"
+                  maxLength={100}
                   required
                 />
               </div>
             </div>
 
             <div className="auth-field">
-              <label htmlFor="register-email">
-                Email address
-              </label>
+              <label htmlFor="register-email">Email address</label>
 
               <div className="auth-input-wrapper">
                 <Mail size={18} />
@@ -163,9 +208,83 @@ export default function RegisterPage({
             </div>
 
             <div className="auth-field">
-              <label htmlFor="register-password">
-                Password
-              </label>
+              <label htmlFor="register-country-search">Country or territory</label>
+
+              <div className="auth-input-wrapper">
+                <Search size={18} />
+
+                <input
+                  id="register-country-search"
+                  type="search"
+                  placeholder="Search all countries..."
+                  value={countrySearch}
+                  onChange={(event) => setCountrySearch(event.target.value)}
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="auth-input-wrapper">
+                <Globe2 size={18} />
+
+                <select
+                  id="register-country"
+                  value={countryCode}
+                  onChange={(event) => handleCountryChange(event.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select your country
+                  </option>
+
+                  {filteredCountries.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {filteredCountries.length === 0 && (
+                <span className="auth-field-hint">
+                  No matching country found.
+                </span>
+              )}
+            </div>
+
+            <div className="auth-field">
+              <label htmlFor="register-currency">Preferred currency</label>
+
+              <div className="auth-input-wrapper">
+                <Coins size={18} />
+
+                <select
+                  id="register-currency"
+                  value={currency}
+                  onChange={(event) => setCurrency(event.target.value)}
+                  disabled={!countryCode}
+                  required
+                >
+                  <option value="" disabled>
+                    {!countryCode
+                      ? 'Select a country first'
+                      : 'Choose your currency'}
+                  </option>
+
+                  {availableCurrencies.map((item) => (
+                    <option key={item.code} value={item.code}>
+                      {item.code} — {item.name} ({item.symbol})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <span className="auth-field-hint">
+                You can change your display currency later in settings.
+              </span>
+            </div>
+
+            <div className="auth-field">
+              <label htmlFor="register-password">Password</label>
 
               <div className="auth-input-wrapper">
                 <LockKeyhole size={18} />
@@ -178,6 +297,7 @@ export default function RegisterPage({
                   onChange={(event) => setPassword(event.target.value)}
                   autoComplete="new-password"
                   minLength={8}
+                  maxLength={128}
                   required
                 />
 

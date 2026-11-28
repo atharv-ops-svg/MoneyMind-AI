@@ -1,6 +1,6 @@
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+  import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
 
 export interface AuthUser {
   id: number
@@ -28,7 +28,7 @@ async function saveToken(token: string): Promise<void> {
     const saved = await window.electronAPI.auth.setToken(token)
 
     if (!saved) {
-      throw new Error('Could not securely save your session.')
+      throw new Error('Unable to securely save your login session.')
     }
 
     return
@@ -46,15 +46,27 @@ async function removeToken(): Promise<void> {
   localStorage.removeItem(TOKEN_KEY)
 }
 
-async function getErrorMessage(response: Response): Promise<string> {
+async function getErrorMessage(
+  response: Response,
+): Promise<string> {
   try {
-    const data = await response.json()
+    const error = await response.json()
 
-    if (typeof data.detail === 'string') {
-      return data.detail
+    if (typeof error.detail === 'string') {
+      return error.detail
+    }
+
+    if (Array.isArray(error.detail)) {
+      return error.detail
+        .map((item: { msg?: string }) => item.msg || 'Invalid input.')
+        .join(' ')
+    }
+
+    if (typeof error.message === 'string') {
+      return error.message
     }
   } catch {
-    // Use the fallback message below.
+    // Use the fallback message if the response is not JSON.
   }
 
   return `Request failed (${response.status}). Please try again.`
@@ -64,7 +76,22 @@ async function request<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}/api/v1${endpoint}`, options)
+  let response: Response
+
+  try {
+    response = await fetch(
+      `${API_BASE_URL}/api/v1${endpoint}`,
+      options,
+    )
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        `Could not connect to the API at ${API_BASE_URL}. Make sure the backend is running.`,
+      )
+    }
+
+    throw error
+  }
 
   if (!response.ok) {
     throw new Error(await getErrorMessage(response))
@@ -78,6 +105,7 @@ export async function registerAccount(
   email: string,
   password: string,
   countryCode: string,
+  currency: string,
 ): Promise<AuthUser> {
   return request<AuthUser>('/auth/register', {
     method: 'POST',
@@ -89,6 +117,7 @@ export async function registerAccount(
       email,
       password,
       country_code: countryCode,
+      currency,
     }),
   })
 }
@@ -102,13 +131,16 @@ export async function loginAccount(
   formData.set('username', email)
   formData.set('password', password)
 
-  const tokenResponse = await request<TokenResponse>('/auth/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+  const tokenResponse = await request<TokenResponse>(
+    '/auth/login',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData,
     },
-    body: formData,
-  })
+  )
 
   await saveToken(tokenResponse.access_token)
 
@@ -129,12 +161,16 @@ export async function getCurrentUser(): Promise<AuthUser> {
   })
 }
 
+export async function getAccessToken(): Promise<string | null> {
+  return getToken()
+}
+
 export async function logoutAccount(): Promise<void> {
   const token = await getToken()
 
   try {
     if (token) {
-      await request<{ message: string }>('/auth/logout', {
+      await request('/auth/logout', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

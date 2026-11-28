@@ -1,18 +1,23 @@
+
 {
   "name": "moneymind-ai",
   "productName": "MoneyMind AI",
+  "description": "Personal finance companion powered by MoneyMind AI",
+  "author": "MoneyMind AI",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
-    "app:dev": "concurrently -k \"vite --host localhost\" \"wait-on http://localhost:5173 && electron .\"",
+    "native:build": "cargo build --release --manifest-path native/windows-hello/Cargo.toml",
+    "app:dev": "npm run native:build && concurrently -k \"cd backend && .venv\\Scripts\\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload\" \"vite --host localhost\" \"wait-on http-get://127.0.0.1:8000/health http://localhost:5173 && electron .\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dist:win": "npm run build && electron-builder --win nsis",
-    "dist:win:dir": "npm run build && electron-builder --win dir"
+    "copy:installer": "node -e \"const fs=require('fs');const src='release/MoneyMind-AI-Setup-0.1.0.exe';const dest='public/downloads/MoneyMind-AI-Setup-0.1.0.exe';if(!fs.existsSync(src)){console.error('Installer not found: '+src);process.exit(1)}fs.mkdirSync('public/downloads',{recursive:true});fs.copyFileSync(src,dest);console.log('Installer copied to '+dest)\"",
+    "dist:win": "npm run native:build && npm run build && electron-builder --win nsis && npm run copy:installer",
+    "dist:win:dir": "npm run native:build && npm run build && electron-builder --win dir"
   },
   "dependencies": {
     "lucide-react": "^1.81.0",
@@ -28,7 +33,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "concurrently": "^10.0.7",
-    "electron": "latest",
+    "electron": "45.4.1",
     "electron-builder": "^26.18.0",
     "eslint": "^10.14.0",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -48,10 +53,12 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
+      "public/favicon.ico",
       "package.json"
     ],
     "asar": true,
     "win": {
+      "icon": "public/favicon.ico",
       "target": [
         {
           "target": "nsis",
@@ -69,7 +76,15 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "MoneyMind AI",
+      "installerIcon": "public/favicon.ico",
+      "uninstallerIcon": "public/favicon.ico",
       "deleteAppDataOnUninstall": false
-    }
+    },
+    "extraResources": [
+      {
+        "from": "native/windows-hello/target/release/windows-hello.exe",
+        "to": "native/windows-hello.exe"
+      }
+    ]
   }
 }

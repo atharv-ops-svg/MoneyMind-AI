@@ -1,6 +1,7 @@
 
 import {
   ArrowRight,
+  Download,
   ShieldCheck,
   Sparkles,
   TrendingUp,
@@ -26,10 +27,28 @@ export default function StartingPage({
         </div>
 
         <div className="starting-header-actions">
+          <a
+            href="/downloads/MoneyMind-AI-Setup-0.1.0.exe"
+            download="MoneyMind-AI-Setup-0.1.0.exe"
+            className="starting-signin-link"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              textDecoration: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <Download size={16} />
+            Download
+          </a>
+
           <span>Already have an account?</span>
+
           <button
             className="starting-signin-link"
             onClick={onSignIn}
+            type="button"
           >
             Sign in
           </button>
@@ -61,6 +80,7 @@ export default function StartingPage({
             <button
               className="starting-primary-button"
               onClick={onCreateAccount}
+              type="button"
             >
               Create your account
               <ArrowRight size={18} />
@@ -69,6 +89,7 @@ export default function StartingPage({
             <button
               className="starting-secondary-button"
               onClick={onSignIn}
+              type="button"
             >
               Sign in
             </button>

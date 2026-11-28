@@ -9,4 +9,4 @@ FinanceCategory = Literal[
     "Education",
     "Entertainment",
     "Other",
-]
+] 

@@ -1,0 +1,1172 @@
+
+/* -------------------------------------------------------------------------- */
+/* MONEY MIND AI — DESKTOP FINANCE APPLICATION                                */
+/* Scoped to .app-shell to protect the public website styles.                  */
+/* -------------------------------------------------------------------------- */
+
+.app-shell {
+  --app-bg: #f5f7fb;
+  --app-surface: #ffffff;
+  --app-surface-soft: #f8f9fc;
+  --app-text: #182338;
+  --app-muted: #8590a3;
+  --app-line: #edf0f5;
+  --app-purple: #7458e8;
+  --app-purple-light: #f0edff;
+  --app-green: #16a879;
+  --app-coral: #f17b78;
+  --app-blue: #5089ed;
+  --app-shadow: 0 8px 28px rgba(29, 42, 68, 0.055);
+
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+}
+
+body.dark .app-shell {
+  --app-bg: #111827;
+  --app-surface: #1b2535;
+  --app-surface-soft: #202c3e;
+  --app-text: #edf2fa;
+  --app-muted: #9aa8bc;
+  --app-line: #303d50;
+  --app-purple: #9a85ff;
+  --app-purple-light: #302a4e;
+  --app-green: #38c99a;
+  --app-coral: #ff8985;
+  --app-blue: #78a9ff;
+  --app-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+}
+
+.app-shell *,
+.app-shell *::before,
+.app-shell *::after {
+  box-sizing: border-box;
+}
+
+.app-shell button,
+.app-shell input,
+.app-shell select,
+.app-shell textarea {
+  font: inherit;
+}
+
+.app-shell button {
+  cursor: pointer;
+}
+
+.app-shell button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app-shell h1,
+.app-shell h2,
+.app-shell h3,
+.app-shell p {
+  margin-top: 0;
+}
+
+.app-shell p {
+  color: var(--app-muted);
+  line-height: 1.6;
+}
+
+.app-shell .muted {
+  color: var(--app-muted);
+}
+
+/* -------------------------------------------------------------------------- */
+/* SIDEBAR                                                                     */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex: 0 0 250px;
+  flex-direction: column;
+  width: 250px;
+  height: 100vh;
+  padding: 26px 17px 18px;
+  overflow-y: auto;
+  background: var(--app-surface);
+  border-right: 1px solid var(--app-line);
+}
+
+.app-shell .brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 9px;
+  margin-bottom: 39px;
+}
+
+.app-shell .brand-mark,
+.app-shell .auth-brand-icon {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 13px;
+  background: var(--app-purple-light);
+}
+
+.app-shell .brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.app-shell .brand b {
+  display: block;
+  color: var(--app-text);
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.app-shell .brand small,
+.app-shell .profile small {
+  display: block;
+  margin-top: 4px;
+  color: var(--app-muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.app-shell .side-label {
+  padding: 0 10px;
+  margin-bottom: 12px;
+  color: var(--app-muted);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.3px;
+}
+
+.app-shell .sidebar nav {
+  display: grid;
+  gap: 6px;
+}
+
+.app-shell .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 45px;
+  padding: 0 12px;
+  color: var(--app-muted);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.app-shell .nav-item > span {
+  display: grid;
+  width: 22px;
+  place-items: center;
+}
+
+.app-shell .nav-item:hover {
+  color: var(--app-purple);
+  background: var(--app-purple-light);
+}
+
+.app-shell .nav-item.active {
+  color: var(--app-purple);
+  background: var(--app-purple-light);
+  font-weight: 700;
+}
+
+.app-shell .sidebar-bottom {
+  margin-top: auto;
+  padding-top: 25px;
+}
+
+.app-shell .help-card {
+  padding: 16px;
+  margin-bottom: 19px;
+  background: var(--app-surface-soft);
+  border: 1px solid var(--app-line);
+  border-radius: 13px;
+}
+
+.app-shell .help-icon {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  margin-bottom: 12px;
+  color: var(--app-purple);
+  background: var(--app-purple-light);
+  border-radius: 10px;
+  place-items: center;
+}
+
+.app-shell .help-card b {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.app-shell .help-card p {
+  margin-bottom: 0;
+  font-size: 11px;
+}
+
+.app-shell .profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 5px 0;
+  border-top: 1px solid var(--app-line);
+}
+
+.app-shell .profile b {
+  display: block;
+  font-size: 12px;
+}
+
+.app-shell .avatar {
+  display: grid;
+  flex: 0 0 35px;
+  width: 35px;
+  height: 35px;
+  color: #fff;
+  background: var(--app-purple);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 750;
+  place-items: center;
+}
+
+.app-shell .dots {
+  margin-left: auto;
+  color: var(--app-muted);
+}
+
+/* -------------------------------------------------------------------------- */
+/* MAIN CONTENT AND TOPBAR                                                     */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .main {
+  flex: 1;
+  min-width: 0;
+  padding: 27px clamp(20px, 3.2vw, 48px) 18px;
+}
+
+.app-shell .topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.app-shell .eyebrow {
+  margin-bottom: 6px;
+  color: var(--app-purple);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.app-shell .topbar h1 {
+  margin: 0;
+  color: var(--app-text);
+  font-size: clamp(23px, 2.4vw, 30px);
+  font-weight: 760;
+  letter-spacing: -0.8px;
+}
+
+.app-shell .top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-shell .date-pill {
+  padding: 9px 13px;
+  color: var(--app-muted);
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 9px;
+  font-size: 11px;
+}
+
+.app-shell .icon-btn {
+  display: grid;
+  width: 39px;
+  height: 39px;
+  color: var(--app-muted);
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 10px;
+  place-items: center;
+}
+
+.app-shell .icon-btn:hover {
+  color: var(--app-purple);
+  border-color: var(--app-purple);
+}
+
+.app-shell .page {
+  display: block;
+  min-width: 0;
+  animation: finance-page-in 180ms ease;
+}
+
+@keyframes finance-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-shell .section-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 23px;
+}
+
+.app-shell .section-intro h2 {
+  margin-bottom: 5px;
+  color: var(--app-text);
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.app-shell .section-intro p {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* BUTTONS                                                                     */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .primary-btn,
+.app-shell .soft-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 39px;
+  padding: 9px 15px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: transform 150ms ease, background 150ms ease;
+}
+
+.app-shell .primary-btn {
+  color: #fff;
+  background: var(--app-purple);
+  border: 1px solid var(--app-purple);
+}
+
+.app-shell .primary-btn:hover {
+  background: #6246d4;
+  transform: translateY(-1px);
+}
+
+.app-shell .soft-btn {
+  color: var(--app-text);
+  background: var(--app-surface-soft);
+  border: 1px solid var(--app-line);
+}
+
+.app-shell .soft-btn:hover {
+  color: var(--app-purple);
+  border-color: var(--app-purple);
+}
+
+.app-shell .text-btn {
+  display: inline-grid;
+  width: 33px;
+  height: 33px;
+  padding: 0;
+  color: var(--app-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  place-items: center;
+}
+
+.app-shell .text-btn:hover {
+  color: var(--app-purple);
+  background: var(--app-purple-light);
+}
+
+/* -------------------------------------------------------------------------- */
+/* DASHBOARD AND STATISTICS                                                    */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .welcome-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 21px;
+}
+
+.app-shell .welcome-row h2 {
+  margin-bottom: 5px;
+  font-size: 19px;
+}
+
+.app-shell .welcome-row p {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+.app-shell .live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  color: var(--app-green);
+  background: color-mix(in srgb, var(--app-green) 10%, transparent);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.app-shell .live-tag i {
+  width: 6px;
+  height: 6px;
+  background: var(--app-green);
+  border-radius: 50%;
+}
+
+.app-shell .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 19px;
+}
+
+.app-shell .stat-card {
+  position: relative;
+  min-width: 0;
+  padding: 19px;
+  overflow: hidden;
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 14px;
+  box-shadow: var(--app-shadow);
+}
+
+.app-shell .stat-top {
+  color: var(--app-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.app-shell .stat-value {
+  margin: 12px 0 7px;
+  color: var(--app-text);
+  font-size: clamp(19px, 2vw, 26px);
+  font-weight: 760;
+  letter-spacing: -0.6px;
+  overflow-wrap: anywhere;
+}
+
+.app-shell .stat-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--app-muted);
+  font-size: 10px;
+}
+
+.app-shell .stat-icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  color: var(--app-purple);
+  background: var(--app-purple-light);
+  border-radius: 10px;
+  place-items: center;
+}
+
+.app-shell .green {
+  color: var(--app-green);
+}
+
+.app-shell .coral {
+  color: var(--app-coral);
+}
+
+.app-shell .violet {
+  color: var(--app-purple);
+}
+
+.app-shell .blue {
+  color: var(--app-blue);
+}
+
+.app-shell .balance-card {
+  background: linear-gradient(135deg, #7458e8, #927cf4);
+  border: 0;
+}
+
+.app-shell .balance-card,
+.app-shell .balance-card .stat-value,
+.app-shell .balance-card .stat-top,
+.app-shell .balance-card .stat-foot {
+  color: #fff;
+}
+
+.app-shell .balance-orb {
+  position: absolute;
+  right: -35px;
+  bottom: -55px;
+  width: 155px;
+  height: 155px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* PANELS AND CHARTS                                                           */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .content-grid,
+.app-shell .lower-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+  gap: 17px;
+  margin-bottom: 18px;
+}
+
+.app-shell .panel {
+  min-width: 0;
+  padding: 20px;
+  margin-bottom: 17px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 14px;
+  box-shadow: var(--app-shadow);
+}
+
+.app-shell .panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.app-shell .panel-head h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  color: var(--app-text);
+  font-size: 14px;
+  font-weight: 730;
+}
+
+.app-shell .panel-head p {
+  margin-bottom: 0;
+  font-size: 11px;
+}
+
+.app-shell .more {
+  color: var(--app-muted);
+  font-size: 11px;
+}
+
+.app-shell .chart-wrap {
+  width: 100%;
+  height: 260px;
+  min-width: 0;
+}
+
+.app-shell .doughnut-wrap {
+  width: 100%;
+  height: 220px;
+  min-width: 0;
+}
+
+.app-shell .legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 13px;
+}
+
+.app-shell .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--app-muted);
+  font-size: 10px;
+}
+
+.app-shell .legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.app-shell .empty-state {
+  display: grid;
+  min-height: 130px;
+  padding: 22px;
+  color: var(--app-muted);
+  font-size: 12px;
+  text-align: center;
+  place-items: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* TRANSACTIONS                                                                */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .toolbar {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 17px;
+}
+
+.app-shell .toolbar input {
+  flex: 1;
+  min-width: 120px;
+}
+
+.app-shell .table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.app-shell table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.app-shell th {
+  padding: 12px 13px;
+  color: var(--app-muted);
+  background: var(--app-surface-soft);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.35px;
+}
+
+.app-shell td {
+  padding: 14px 13px;
+  color: var(--app-text);
+  border-bottom: 1px solid var(--app-line);
+  font-size: 11px;
+}
+
+.app-shell tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.app-shell tbody tr:hover {
+  background: var(--app-surface-soft);
+}
+
+.app-shell .income-text {
+  color: var(--app-green);
+  font-weight: 700;
+}
+
+.app-shell .expense-text {
+  color: var(--app-coral);
+  font-weight: 700;
+}
+
+/* -------------------------------------------------------------------------- */
+/* FORMS AND INPUTS                                                            */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .form-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.app-shell label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--app-text);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.app-shell input,
+.app-shell select,
+.app-shell textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+  color: var(--app-text);
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 8px;
+  outline: none;
+  font-size: 12px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.app-shell input::placeholder,
+.app-shell textarea::placeholder {
+  color: var(--app-muted);
+  opacity: 0.8;
+}
+
+.app-shell input:focus,
+.app-shell select:focus,
+.app-shell textarea:focus {
+  border-color: var(--app-purple);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-purple) 13%, transparent);
+}
+
+.app-shell input[type="checkbox"],
+.app-shell input[type="radio"] {
+  width: auto;
+  min-height: auto;
+}
+
+.app-shell .modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 19px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* BUDGETS AND SAVINGS GOALS                                                   */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .budget-grid,
+.app-shell .goal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.app-shell .budget-card,
+.app-shell .goal-card {
+  min-width: 0;
+  padding: 19px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 14px;
+  box-shadow: var(--app-shadow);
+}
+
+.app-shell .budget-card .stat-value,
+.app-shell .goal-card .stat-value {
+  font-size: 22px;
+}
+
+.app-shell .budget-card label,
+.app-shell .goal-card label {
+  margin-top: 17px;
+}
+
+.app-shell .budget-card > .soft-btn {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.app-shell .goal-card .modal-actions {
+  justify-content: space-between;
+}
+
+.app-shell .goal-card .modal-actions .soft-btn {
+  flex: 1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* RECENT TRANSACTIONS                                                         */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .tx-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--app-line);
+}
+
+.app-shell .tx-item:last-child {
+  border-bottom: 0;
+}
+
+.app-shell .tx-icon {
+  display: grid;
+  flex: 0 0 37px;
+  width: 37px;
+  height: 37px;
+  color: var(--app-purple);
+  background: var(--app-purple-light);
+  border-radius: 10px;
+  place-items: center;
+}
+
+.app-shell .tx-name {
+  color: var(--app-text);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.app-shell .tx-meta {
+  margin-top: 4px;
+  color: var(--app-muted);
+  font-size: 10px;
+}
+
+.app-shell .tx-amount {
+  margin-left: auto;
+  color: var(--app-text);
+  font-size: 11px;
+  font-weight: 750;
+  text-align: right;
+}
+
+/* -------------------------------------------------------------------------- */
+/* AI ASSISTANT                                                                */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .assistant-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.app-shell .assistant-messages {
+  background: var(--app-surface-soft);
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+}
+
+.app-shell .assistant-message {
+  max-width: 85%;
+  padding: 13px 15px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+}
+
+.app-shell .assistant-message.user {
+  align-self: flex-end;
+  background: var(--app-purple-light);
+  border-color: transparent;
+}
+
+.app-shell .assistant-message strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--app-text);
+  font-size: 10px;
+}
+
+.app-shell .assistant-message p {
+  margin-bottom: 0;
+  color: var(--app-text);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.app-shell .assistant-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.app-shell .assistant-suggestions .soft-btn {
+  min-height: 32px;
+  font-size: 10px;
+}
+
+.app-shell .assistant-preview {
+  position: relative;
+  overflow: hidden;
+}
+
+.app-shell .assistant-art {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 12px;
+  color: var(--app-purple);
+  background: var(--app-purple-light);
+  border-radius: 12px;
+  place-items: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* SETTINGS                                                                    */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .settings-panel {
+  max-width: 850px;
+}
+
+.app-shell .setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--app-line);
+}
+
+.app-shell .setting-row:last-child {
+  border-bottom: 0;
+}
+
+.app-shell .setting-row > div {
+  min-width: 0;
+}
+
+.app-shell .setting-row strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--app-text);
+  font-size: 12px;
+}
+
+.app-shell .setting-row p {
+  margin-bottom: 0;
+  font-size: 11px;
+}
+
+.app-shell .setting-row > input,
+.app-shell .setting-row > select {
+  max-width: 260px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* MODALS AND NOTIFICATIONS                                                    */
+/* -------------------------------------------------------------------------- */
+
+.app-shell .modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: grid;
+  padding: 20px;
+  background: rgba(10, 15, 30, 0.55);
+  place-items: center;
+}
+
+.app-shell .modal {
+  width: min(100%, 470px);
+  max-height: 85vh;
+  padding: 24px;
+  overflow-y: auto;
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 16px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.2);
+}
+
+.app-shell .modal-close {
+  color: var(--app-muted);
+  background: transparent;
+  border: 0;
+}
+
+.app-shell .notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 11000;
+  display: grid;
+  width: min(360px, calc(100vw - 40px));
+  gap: 10px;
+}
+
+.app-shell .notification-close {
+  margin-left: auto;
+  color: inherit;
+  background: transparent;
+  border: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* FOOTER                                                                      */
+/* -------------------------------------------------------------------------- */
+
+.app-shell footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 24px 2px 5px;
+  margin-top: 14px;
+  color: var(--app-muted);
+  font-size: 10px;
+}
+
+.app-shell footer > span {
+  color: var(--app-purple);
+}
+
+.app-shell .footer-right {
+  margin-left: auto;
+  color: var(--app-muted);
+}
+
+/* -------------------------------------------------------------------------- */
+/* RESPONSIVE                                                                  */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 1050px) {
+  .app-shell .sidebar {
+    flex-basis: 215px;
+    width: 215px;
+  }
+
+  .app-shell .main {
+    padding-right: 22px;
+    padding-left: 22px;
+  }
+
+  .app-shell .stats-grid {
+    gap: 10px;
+  }
+
+  .app-shell .stat-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 800px) {
+  .app-shell .sidebar {
+    flex-basis: 75px;
+    width: 75px;
+    padding: 22px 10px;
+  }
+
+  .app-shell .brand {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .app-shell .brand > div:last-child,
+  .app-shell .side-label,
+  .app-shell .nav-item:not(.active) {
+    font-size: 0;
+  }
+
+  .app-shell .nav-item {
+    justify-content: center;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .app-shell .nav-item > span {
+    width: auto;
+  }
+
+  .app-shell .help-card,
+  .app-shell .profile > div:not(.avatar),
+  .app-shell .profile .dots {
+    display: none;
+  }
+
+  .app-shell .profile {
+    justify-content: center;
+  }
+
+  .app-shell .content-grid,
+  .app-shell .lower-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-shell .main {
+    padding: 19px 13px;
+  }
+
+  .app-shell .topbar {
+    align-items: flex-start;
+    margin-bottom: 23px;
+  }
+
+  .app-shell .topbar h1 {
+    font-size: 22px;
+  }
+
+  .app-shell .date-pill {
+    display: none;
+  }
+
+  .app-shell .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell .form-two,
+  .app-shell .budget-grid,
+  .app-shell .goal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell .section-intro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .app-shell .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .app-shell .setting-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .app-shell .setting-row > input,
+  .app-shell .setting-row > select {
+    max-width: none;
+  }
+
+  .app-shell .footer-right {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell *,
+  .app-shell *::before,
+  .app-shell *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

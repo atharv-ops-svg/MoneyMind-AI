@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 
 import { isDesktopApp } from '../../utils/platform'
+import { useFinance } from '../../context/useFinance'
 
 export type PageId =
   | 'dashboard'
@@ -40,6 +41,8 @@ const navigationItems = [
 ] as const
 
 function Sidebar({ activePage, onNavigate }: SidebarProps) {
+  const { data } = useFinance()
+
   const visibleNavigationItems = isDesktopApp
     ? navigationItems
     : [
@@ -51,16 +54,24 @@ function Sidebar({ activePage, onNavigate }: SidebarProps) {
         },
       ]
 
+  const profileName = data.profile.trim() || 'MoneyMind User'
+
+  const initials = profileName
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part.charAt(0).toUpperCase())
+    .join('')
+
   return (
     <aside className="sidebar">
       <div className="brand">
         <div className="brand-mark">
-  <img
-    src="/icons.png"
-    alt="MoneyMind AI"
-    className="brand-logo"
-  />
-</div>
+          <img
+            src="/logo.png"
+            alt="MoneyMind AI"
+            className="brand-logo"
+          />
+        </div>
 
         <div>
           <b>MoneyMind AI</b>
@@ -110,10 +121,10 @@ function Sidebar({ activePage, onNavigate }: SidebarProps) {
         </div>
 
         <div className="profile">
-          <div className="avatar">MM</div>
+          <div className="avatar">{initials || 'MM'}</div>
 
           <div>
-            <b>MoneyMind User</b>
+            <b>{profileName}</b>
             <small>Personal Account</small>
           </div>
 

@@ -1,7 +1,4 @@
 
-from typing import Annotated
-
-from babel.numbers import get_territory_currencies
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select
@@ -33,10 +30,10 @@ router = APIRouter()
     status_code=status.HTTP_201_CREATED,
 )
 def register(
-    data: RegisterRequest,
-    db: Annotated[Session, Depends(get_postgres_db)],
+    payload: RegisterRequest,
+    db: Session = Depends(get_postgres_db),
 ):
-    email = str(data.email).strip().lower()
+    email = payload.email.strip().lower()
 
     existing_user = db.scalar(
         select(User).where(User.email == email)
@@ -48,46 +45,41 @@ def register(
             detail="An account with this email already exists.",
         )
 
-    currencies = get_territory_currencies(
-        data.country_code,
-        tender=True,
-    )
-
-    if not currencies:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="No default currency is available for this country.",
-        )
-
     user = User(
         email=email,
-        password_hash=hash_password(data.password),
+        password_hash=hash_password(payload.password),
+        is_active=True,
     )
 
     try:
         db.add(user)
         db.flush()
 
-        user_settings = UserSettings(
-    user_id=user.id,
-    profile=data.name,
-    country_code=data.country_code,
-    currency=currencies[0],
-    theme="light",
-)
+        settings = UserSettings(
+            user_id=user.id,
+            profile=payload.name.strip(),
+            country_code=payload.country_code,
+            currency=payload.currency,
+            theme="light",
+        )
 
-        db.add(user_settings)
+        db.add(settings)
         db.commit()
         db.refresh(user)
 
+        return user
+
     except IntegrityError:
         db.rollback()
+
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="An account with this email already exists.",
-        )
+            detail="Unable to create this account. The email may already be registered.",
+        ) from None
 
-    return user
+    except Exception:
+        db.rollback()
+        raise
 
 
 @router.post(
@@ -95,11 +87,8 @@ def register(
     response_model=TokenResponse,
 )
 def login(
-    form_data: Annotated[
-        OAuth2PasswordRequestForm,
-        Depends(),
-    ],
-    db: Annotated[Session, Depends(get_postgres_db)],
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_postgres_db),
 ):
     email = form_data.username.strip().lower()
 
@@ -108,7 +97,7 @@ def login(
     )
 
     if (
-        user is None
+        not user
         or not verify_password(
             form_data.password,
             user.password_hash,
@@ -121,35 +110,29 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token = create_access_token(user.id)
+    access_token = create_access_token(
+        user_id=user.id,
+    )
 
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-    }
+    return TokenResponse(
+        access_token=access_token,
+    )
 
 
 @router.get(
     "/me",
     response_model=UserAuthResponse,
 )
-def get_my_account(
-    current_user: Annotated[
-        User,
-        Depends(get_current_user),
-    ],
+def get_me(
+    current_user: User = Depends(get_current_user),
 ):
     return current_user
 
 
 @router.post("/logout")
 def logout(
-    current_user: Annotated[
-        User,
-        Depends(get_current_user),
-    ],
+    current_user: User = Depends(get_current_user),
 ):
     return {
-        "message": "Logout acknowledged. The client must discard its access token.",
-        "token_valid_until_expiration": True,
+        "message": "Logged out successfully. Please discard the access token."
     }

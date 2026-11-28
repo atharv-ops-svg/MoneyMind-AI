@@ -1,13 +1,13 @@
 
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useRef,
   useState,
   type ReactNode,
 } from 'react'
+
+import { DialogueContext } from './useDialogue'
 
 import '../styles/dialogue.css'
 
@@ -42,16 +42,6 @@ interface ActiveDialogue {
   defaultValue?: string
   resolve: (result: DialogueResult) => void
 }
-
-interface DialogueContextValue {
-  showAlert: (options: DialogueOptions) => Promise<void>
-  showConfirm: (options: DialogueOptions) => Promise<boolean>
-  showPrompt: (options: PromptOptions) => Promise<string | null>
-}
-
-const DialogueContext = createContext<DialogueContextValue | undefined>(
-  undefined,
-)
 
 function getDialogueIcon(type: DialogueType) {
   switch (type) {
@@ -305,16 +295,4 @@ export function DialogueProvider({
       )}
     </DialogueContext.Provider>
   )
-}
-
-export function useDialogue() {
-  const context = useContext(DialogueContext)
-
-  if (!context) {
-    throw new Error(
-      'useDialogue must be used inside a DialogueProvider.',
-    )
-  }
-
-  return context
 }
